@@ -2,8 +2,6 @@ package com.lx.bot
 
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.User
-import java.util.concurrent.TimeUnit
-import kotlin.random.Random
 import kotlin.system.exitProcess
 
 abstract class BaseLexDialogBot: BaseLexTechBot() {
@@ -24,7 +22,6 @@ abstract class BaseLexDialogBot: BaseLexTechBot() {
     private fun letsgo(input: String, update: Update): String {
         val output = parseAndProcess(input, update)
         send(update.message.chatId, output)
-        audit(update, output)
         if (Resp.END == output) exitProcess(1)
         return output
     }
@@ -55,17 +52,8 @@ abstract class BaseLexDialogBot: BaseLexTechBot() {
         return null
     }
 
-    open fun postprocess(output: String?, user: User): String {
-        if (output == null) return Resp.NOTHING
-        if (output.startsWith("debug") || !output.contains("[")) {
-            return output
-        }
-        var rez = output.replace("[user]", getUserName(user))
-        if (rez.contains("[fullName]")) {
-            rez = rez.replace("[fullName]", "${user.firstName} ${user.lastName ?: ""}")
-        }
-        return rez
+    open fun postprocess(output: String?, user: User) = when(output) {
+        null -> Resp.NOTHING
+        else -> output
     }
-
-    private fun getUserName(user: User) = user.firstName
 }

@@ -1,7 +1,5 @@
-package com.lx.bot
+package com.lx.botest1
 
-import com.lx.botest1.Test1bot
-import com.lx.botest1.VERSION
 import org.telegram.telegrambots.ApiContextInitializer
 import org.telegram.telegrambots.meta.TelegramBotsApi
 
